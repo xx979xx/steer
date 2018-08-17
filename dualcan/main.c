@@ -20,8 +20,6 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32_eval.h"
-#include "stm3210c_eval_lcd.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Examples
   * @{
@@ -51,7 +49,6 @@ CanTxMsg TxMessage;
 /* Private function prototypes -----------------------------------------------*/
 void NVIC_Config(void);
 void CAN_Config(void);
-void LED_Display(uint8_t Ledstatus);
 void Init_RxMes(CanRxMsg *RxMessage);
 void Delay(void);
 
@@ -74,49 +71,7 @@ int main(void)
   /* NVIC configuration */
   NVIC_Config();
 
-  /* Configures LED 1..4 */
-  STM_EVAL_LEDInit(LED1);
-  STM_EVAL_LEDInit(LED2);
-  STM_EVAL_LEDInit(LED3);
-  STM_EVAL_LEDInit(LED4);
-
-  /* LCD Initialization */
-  STM3210C_LCD_Init();
-  LCD_Clear(LCD_COLOR_WHITE);
-
-  /* Set the LCD Back Color */
-  LCD_SetBackColor(LCD_COLOR_RED);
-  /* Set the LCD Text Color */
-  LCD_SetTextColor(LCD_COLOR_GREEN);
-  
-  LCD_DisplayStringLine(LCD_LINE_0, "   STM3210C-EVAL    ");
-  LCD_DisplayStringLine(LCD_LINE_1, " STM32F10x Dual CAN ");
-  LCD_DisplayStringLine(LCD_LINE_2, "To start Press on:  ");
-  LCD_DisplayStringLine(LCD_LINE_3, "Key or Tamper Button");
-
-  /* Set the LCD Back Color */
-  LCD_SetBackColor(LCD_COLOR_BLUE);
-
-#if CAN_BAUDRATE == 1000 /* 1MBps */
-  LCD_DisplayStringLine(LCD_LINE_4, " BAUDRATE = 1MBps   ");
-#elif CAN_BAUDRATE == 500 /* 500KBps */
-  LCD_DisplayStringLine(LCD_LINE_4, " BAUDRATE = 500kBps   ");
-#elif CAN_BAUDRATE == 250 /* 250KBps */
-  LCD_DisplayStringLine(LCD_LINE_4, " BAUDRATE = 250kBps   ");
-#elif CAN_BAUDRATE == 125 /* 125KBps */
-  LCD_DisplayStringLine(LCD_LINE_4, " BAUDRATE = 125kBps   ");
-#elif  CAN_BAUDRATE == 100 /* 100KBps */
-  LCD_DisplayStringLine(LCD_LINE_4, " BAUDRATE = 100kBps   ");
-#elif  CAN_BAUDRATE == 50 /* 50KBps */
-  LCD_DisplayStringLine(LCD_LINE_4, " BAUDRATE = 50kBps   ");
-#elif  CAN_BAUDRATE == 20 /* 20KBps */
-  LCD_DisplayStringLine(LCD_LINE_4, " BAUDRATE = 20kBps   ");
-#elif  CAN_BAUDRATE == 10 /* 10KBps */
-  LCD_DisplayStringLine(LCD_LINE_4, " BAUDRATE = 10kBps   ");
-#endif
-  /* Set the LCD Text Color */
-  LCD_SetTextColor(LCD_COLOR_WHITE);   
-    
+ 
   /* Configure BUTTON_KEY */
   STM_EVAL_PBInit(BUTTON_KEY, BUTTON_MODE_GPIO); 
   
@@ -332,38 +287,30 @@ void LED_Display(uint8_t Ledstatus)
   {
     case(1): 
       STM_EVAL_LEDOn(LED1);
-      LCD_DisplayStringLine(LCD_LINE_5, "CAN1 send Frame     ");
-      LCD_DisplayStringLine(LCD_LINE_6, "                    ");
       break;
    
     case(2): 
       STM_EVAL_LEDOn(LED2);
-      LCD_DisplayStringLine(LCD_LINE_5, "                    ");
-      LCD_DisplayStringLine(LCD_LINE_6, "CAN2 send Frame     ");
       break;
             
     case(3): 
       STM_EVAL_LEDOff(LED1);
       STM_EVAL_LEDOn(LED3);
-      LCD_DisplayStringLine(LCD_LINE_5, "CAN1 receive Passed ");
       break;
      
     case(4): 
       STM_EVAL_LEDOff(LED2);
       STM_EVAL_LEDOn(LED4);
-      LCD_DisplayStringLine(LCD_LINE_6, "CAN2 receive Passed ");
       break;
 
     case(5): 
       STM_EVAL_LEDOff(LED1);
       STM_EVAL_LEDOff(LED3);
-      LCD_DisplayStringLine(LCD_LINE_7, "Communication Failed ");
       break;
 
     case(6): 
       STM_EVAL_LEDOff(LED2);
       STM_EVAL_LEDOff(LED4);
-      LCD_DisplayStringLine(LCD_LINE_7, "Communication Failed ");
       break;
       
     default:
